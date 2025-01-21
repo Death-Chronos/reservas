@@ -23,5 +23,6 @@ public class Reserva {
     private Long id;
     private LocalDateTime inicio;
     private LocalDateTime fim;
+    private Quarto quarto;
 
 }
