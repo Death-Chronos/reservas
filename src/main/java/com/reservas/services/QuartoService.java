@@ -6,7 +6,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.reservas.exceptions.ResourceNotFoundException;
+import com.reservas.exceptions.RecursoNaoEncontradoException;
 import com.reservas.models.Quarto;
 import com.reservas.repositories.QuartoRepository;
 
@@ -22,7 +22,7 @@ public class QuartoService {
 
     public Quarto getQuartoPorId(Long id) {
         return quartoRepo.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Quarto não encontrado com o id: " + id));
+                () -> new RecursoNaoEncontradoException("Quarto não encontrado com o id: " + id));
     }
 
     public List<Quarto> getAllQuartos() {
@@ -39,14 +39,14 @@ public class QuartoService {
 
             return quartoRepo.save(quarto);
         }
-        throw new ResourceNotFoundException("Quarto não encontrado com o id: " + id);
+        throw new RecursoNaoEncontradoException("Quarto não encontrado com o id: " + id);
     }
 
     public void deletarQuarto(Long id) {
         if (quartoExisteById(id)) {
             quartoRepo.deleteById(id);
         } else {
-            throw new ResourceNotFoundException("Quarto não encontrado com o id: " + id);
+            throw new RecursoNaoEncontradoException("Quarto não encontrado com o id: " + id);
         }
     }
 

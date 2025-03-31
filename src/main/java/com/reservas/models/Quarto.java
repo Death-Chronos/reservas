@@ -11,6 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,8 +28,11 @@ public class Quarto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
+    @NotNull(message = "Número do quarto não pode ser nulo.")
     private Integer numero;
+    @NotNull(message = "Tipo do quarto não pode ser nulo.")
     private Tipo tipo;
+    @NotNull(message = "Preço do quarto não pode ser nulo.")
     private Double preco;
 
     @OneToMany(mappedBy = "quarto", cascade = CascadeType.ALL, orphanRemoval = true)

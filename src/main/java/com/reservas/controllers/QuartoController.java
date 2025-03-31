@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.reservas.models.Quarto;
+import com.reservas.models.Reserva;
 import com.reservas.services.QuartoService;
+import com.reservas.services.ReservaService;
 
 import jakarta.validation.Valid;
 
@@ -25,6 +27,9 @@ public class QuartoController {
 
     @Autowired
     QuartoService quartoService;
+
+    @Autowired
+    ReservaService reservaService;
     
     @PostMapping("/criar")
     public ResponseEntity<Quarto> criarQuarto(@RequestBody @Valid Quarto quarto){
@@ -49,5 +54,10 @@ public class QuartoController {
     public ResponseEntity<Void> deletarQuarto(@PathVariable Long id){
         quartoService.deletarQuarto(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @PostMapping("/{quartoId}/reservar")
+    public ResponseEntity<Reserva> reservarQuarto(@PathVariable Long quartoId, @RequestBody @Valid Reserva reserva) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(reservaService.saveReserva(quartoId, reserva));
     }
 }
