@@ -3,7 +3,8 @@ package com.reservas.models;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.reservas.models.enums.Tipo;
+import com.reservas.models.enums.ClasssificacaoQuarto;
+import com.reservas.models.enums.TipoQuarto;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -27,22 +28,28 @@ public class Quarto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @NotNull(message = "Número do quarto não pode ser nulo.")
     private Integer numero;
     @NotNull(message = "Tipo do quarto não pode ser nulo.")
-    private Tipo tipo;
+    private TipoQuarto tipo;
+    @NotNull(message = "Classificação do quarto não pode ser nulo.")
+    private ClasssificacaoQuarto classificacao;
     @NotNull(message = "Preço do quarto não pode ser nulo.")
     private Double preco;
 
     @OneToMany(mappedBy = "quarto", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Reserva> reservas = new HashSet<Reserva>();
 
-    public Quarto(Integer numero, Tipo tipo, Double preco, Set<Reserva> reservas) {
+    public Quarto(@NotNull(message = "Número do quarto não pode ser nulo.") Integer numero,
+            @NotNull(message = "Tipo do quarto não pode ser nulo.") TipoQuarto tipo,
+            @NotNull(message = "Classificação do quarto não pode ser nulo.") ClasssificacaoQuarto classificacao,
+            @NotNull(message = "Preço do quarto não pode ser nulo.") Double preco) {
         this.numero = numero;
         this.tipo = tipo;
-        this.preco = tipo.getPreco();
-        this.reservas = reservas;
+        this.classificacao = classificacao;
+        this.preco = preco;
+        this.reservas = new HashSet<Reserva>();
     }
 
     public void addReserva(Reserva reserva) {

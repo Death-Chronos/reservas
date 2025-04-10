@@ -2,8 +2,8 @@ package com.reservas.models;
 
 import java.time.LocalDate;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.reservas.models.enums.StatusReserva;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,6 +28,7 @@ public class Reserva {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
+    private StatusReserva status;
     @NotNull(message = "Data de início não pode ser nula.")
     private LocalDate inicio;
     @NotNull(message = "Data de fim não pode ser nula.")
@@ -37,5 +38,15 @@ public class Reserva {
     @JoinColumn(name = "quarto_id")
     @JsonIgnore
     private Quarto quarto;
+
+    public Reserva(@NotNull(message = "Data de início não pode ser nula.") LocalDate inicio,
+            @NotNull(message = "Data de fim não pode ser nula.") LocalDate fim, Quarto quarto) {
+        this.status = StatusReserva.ATIVA;
+        this.inicio = inicio;
+        this.fim = fim;
+        this.quarto = quarto;
+    }
+
+    
 
 }
