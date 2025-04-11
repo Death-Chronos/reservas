@@ -1,6 +1,7 @@
 package com.reservas.controllers;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,6 +41,7 @@ public class QuartoController {
     public ResponseEntity<Quarto> getQuartoPorId(@PathVariable Long id){
         return ResponseEntity.status(HttpStatus.OK).body(quartoService.getQuartoPorId(id));
     }
+    
     @GetMapping("/all")
     public ResponseEntity<List<Quarto>> getAllQuartos(){
         return ResponseEntity.status(HttpStatus.OK).body(quartoService.getAllQuartos());
@@ -51,13 +53,32 @@ public class QuartoController {
     }
 
     @DeleteMapping("/deletar/{id}")
-    public ResponseEntity<Void> deletarQuarto(@PathVariable Long id){
+    public ResponseEntity<String> deletarQuarto(@PathVariable Long id){
         quartoService.deletarQuarto(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Quarto deletado com sucesso.");
     }
 
     @PostMapping("/{quartoId}/reservar")
     public ResponseEntity<Reserva> reservarQuarto(@PathVariable Long quartoId, @RequestBody @Valid Reserva reserva) {
         return ResponseEntity.status(HttpStatus.CREATED).body(reservaService.saveReserva(quartoId, reserva));
     }
+
+    @GetMapping("/{quartoId}/reservas")
+    public ResponseEntity<Set<Reserva>> getReservasPorQuartoId(@PathVariable Long quartoId) {
+        return ResponseEntity.status(HttpStatus.OK).body(reservaService.getReservasPorQuartoId(quartoId));
+    }
+
+    @DeleteMapping("/reservas/deletar/{id}")
+    public ResponseEntity<String> deletarReserva(@PathVariable Long id) {
+        reservaService.deleteReserva(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Reserva deletada com sucesso.");
+    }
+
+    @DeleteMapping("/reservas/cancelar/{id}")
+    public ResponseEntity<String> cancelarReserva(@PathVariable Long id) {
+        reservaService.cancelarReserva(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Reserva cancelada com sucesso.");
+    }
+
+
 }

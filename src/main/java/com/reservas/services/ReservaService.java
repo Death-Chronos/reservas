@@ -6,6 +6,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.reservas.exceptions.DataReservaInvalidaException;
@@ -17,6 +19,7 @@ import com.reservas.models.enums.StatusReserva;
 import com.reservas.repositories.ReservaRepository;
 
 @Service
+@EnableScheduling
 public class ReservaService {
 
     @Autowired
@@ -27,7 +30,7 @@ public class ReservaService {
 
     public Reserva saveReserva(Long quartoId, Reserva reserva) {
         if (!verificarIntervaloDatas(reserva)) {
-            throw new DataReservaInvalidaException("A data de início deve ser anterior à data de fim.");
+            throw new DataReservaInvalidaException("A data de início deve ser anterior ou igual à data de fim.");
         }
 
         Quarto quarto = quartoService.getQuartoPorId(quartoId);
@@ -36,6 +39,7 @@ public class ReservaService {
                 .filter(r -> reserva.getStatus() == StatusReserva.ATIVA).collect(Collectors.toSet());
         if (verificarDisponilibidade(reserva, reservasAtivas)) {
             reserva.setQuarto(quarto);
+            reserva.setStatus(StatusReserva.ATIVA);
             return reservaRepo.save(reserva);
         } else {
             throw new DataReservadaException("A data requerida já está reservada.");
@@ -67,7 +71,8 @@ public class ReservaService {
         reservaRepo.save(reserva);
     }
 
-    public void finalizarReservas(){
+    @Scheduled(cron = "0 0 23 * * *")
+    public void finalizarReservasExpiradas(){
         List<Reserva> reservas = reservaRepo.findByFimAfter(LocalDate.now());
         reservas.forEach(reserva -> reserva.setStatus(StatusReserva.FINALIZADA));
         reservaRepo.saveAll(reservas);
@@ -84,7 +89,8 @@ public class ReservaService {
     }
 
     private boolean verificarIntervaloDatas(Reserva reserva) {
-        return reserva.getInicio().isBefore(reserva.getFim());
+        return reserva.getInicio().isBefore(reserva.getFim()) ||
+                reserva.getInicio().isEqual(reserva.getFim());
     }
 
     private boolean existebyId(Long id) {
