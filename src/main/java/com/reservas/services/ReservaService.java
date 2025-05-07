@@ -71,7 +71,7 @@ public class ReservaService {
         reservaRepo.save(reserva);
     }
 
-    @Scheduled(cron = "0 0 23 * * *")
+    @Scheduled(cron = "0 0 20 * * *")
     public void finalizarReservasExpiradas(){
         List<Reserva> reservas = reservaRepo.findByFimAfter(LocalDate.now());
         reservas.forEach(reserva -> reserva.setStatus(StatusReserva.FINALIZADA));
