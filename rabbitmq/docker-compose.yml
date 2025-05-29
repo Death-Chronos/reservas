@@ -1,0 +1,13 @@
+services:
+  reservas:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - "15672:15672" # Management UI
+      - "5672:5672"   # RabbitMQ
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin
+    volumes:
+      - ./dados:/var/lib/rabbitmq
