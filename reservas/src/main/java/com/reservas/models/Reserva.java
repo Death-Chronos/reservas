@@ -1,5 +1,6 @@
 package com.reservas.models;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -22,7 +23,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-public class Reserva {
+public class Reserva implements Serializable{
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
