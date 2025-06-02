@@ -1,17 +1,13 @@
 package com.reservas.services;
 
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.reservas.config.RabbitMQConfig;
@@ -22,8 +18,6 @@ import com.reservas.models.Quarto;
 import com.reservas.models.Reserva;
 import com.reservas.models.enums.StatusReserva;
 import com.reservas.repositories.ReservaRepository;
-
-import jakarta.transaction.Transactional;
 
 @Service
 @EnableScheduling
